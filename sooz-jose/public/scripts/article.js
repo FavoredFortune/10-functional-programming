@@ -22,58 +22,62 @@ var app = app || {};
   Article.loadAll = articleData => {
     articleData.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)))
 
-
-    articleData.map(articleObject => Article.all(new Article(articleObject)));
-
-
+    Article.all = articleData.map(articleObject => new Article(articleObject));
   };
 
   Article.fetchAll = callback => {
     $.get('/articles')
-    .then(results => {
-      Article.loadAll(results);
-      callback();
-    })
+      .then(results => {
+        Article.loadAll(results);
+        callback();
+      })
   };
-  // TODO: REVIEW ALL .MAP and .REDUCE functionality
-  Article.numWordsAll = () => {
-    return Article.all.map(Article.all.body.length).reduce((accumulator,currentValue) => {
-      return accumulator + currentValue;
-    },0);
-  };
+  // DONE: REVIEW ALL .MAP and .REDUCE functionality
+  Article.numWordsAll = () => Article.all.map(article => article.body.match(/\b\w+/g).length).reduce((accumulator,currentValue) => accumulator + currentValue)
+  // {
+  //   Article.all.map(Article.all.body.length).reduce((accumulator,currentValue) => {
+  //     return accumulator + currentValue;
+  //   },0);
+  // };
+
 
   Article.allAuthors = () => {
-    return Article.all.map.call(Article.all,function(obj) {
-      return obj.author;
-    });
+    return Article.all.map(article => article.author)
+      .reduce((names,name) => {
+        if(names.indexOf(name) === -1) names.push(name);
+        return names;
+      },[]);
   };
 
   Article.numWordsByAuthor = () => {
-    return Article.allAuthors().map(author => ({
+    return Article.allAuthors().map(author => {
       return {
-        author: this.author,
+        name: author,
         authorStats:
-        Article.allAuthors.map(Article.all.body.length).reduce((accumulator,currentValue) => {
-          return accumulator + currentValue;
-        },0)
-      }));
-    };
+        Article.all.filter(a => a.author === author)
+          .map(a => a.body.match(/\b\w+/g).length)
+          .reduce((accumulator,currentValue) => {
+            accumulator + currentValue;
+          },0)
+      }
+    })
+  };
 
   Article.truncateTable = callback => {
     $.ajax({
       url: '/articles',
       method: 'DELETE',
     })
-    .then(console.log)
+      .then(console.log)
     // REVIEW: Check out this clean syntax for just passing 'assumed' data into a named function! The reason we can do this has to do with the way Promise.prototype.then() works. It's a little outside the scope of 301 material, but feel free to research!
-    .then(callback);
+      .then(callback);
   };
 
   Article.prototype.insertRecord = function(callback) {
     // REVIEW: Why can't we use an arrow function here for .insertRecord()?
     $.post('/articles', {author: this.author, authorUrl: this.authorUrl, body: this.body, category: this.category, publishedOn: this.publishedOn, title: this.title})
-    .then(console.log)
-    .then(callback);
+      .then(console.log)
+      .then(callback);
   };
 
   Article.prototype.deleteRecord = function(callback) {
@@ -81,8 +85,8 @@ var app = app || {};
       url: `/articles/${this.article_id}`,
       method: 'DELETE'
     })
-    .then(console.log)
-    .then(callback);
+      .then(console.log)
+      .then(callback);
   };
 
   Article.prototype.updateRecord = function(callback) {
@@ -99,7 +103,8 @@ var app = app || {};
         author_id: this.author_id
       }
     })
-    .then(console.log)
-    .then(callback);
+      .then(console.log)
+      .then(callback);
   };
+  module.Article = Article;
 })(app);

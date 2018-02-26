@@ -10,9 +10,9 @@
     <link rel="stylesheet" href="styles/layout.css">
     <link rel="stylesheet" href="styles/modules.css">
     <link rel="icon" type="image/x-icon" href="https://avatars2.githubusercontent.com/u/18607604?v=3&s=200">
-    <!-- TODO: UPDATE/REVIEW TEMPLATE SO IT HELPS TO POPULATE THE PAGE -->
+    <!-- DONE: UPDATE/REVIEW TEMPLATE SO IT HELPS TO POPULATE THE PAGE -->
     <script id="author-stats" type="text/x-handlebars-template">
-      <li><strong>{{author}}</strong>: {{author-stats}} words written</li>
+      <li><strong>{{name}}</strong>: {{authorStats}} words written</li>
     </script>
   </head>
   <body>
@@ -54,8 +54,9 @@
     <script src="scripts/article.js"></script>
     <script src="scripts/articleView.js"></script>
     <script>
-      //DONE: CHECK functionality and add Callback
-      Article.fetchAll(articleView.initAdminPage);
+      //DONE: Check functionality and add callback
+      // the fetchAll method takes in a callback that is two objects that have the method of initAdminPage which also contains functions
+      app.Article.fetchAll(app.articleView.initAdminPage);
     </script>
   </body>
 </html>
