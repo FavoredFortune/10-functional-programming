@@ -1,0 +1,19 @@
+{
+  "name": "10-functional-programming",
+  "version": "1.0.0",
+  "description": "review",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FavoredFortune/10-functional-programming.git"
+  },
+  "author": "sooz richman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FavoredFortune/10-functional-programming/issues"
+  },
+  "homepage": "https://github.com/FavoredFortune/10-functional-programming#readme"
+}
